@@ -30,8 +30,39 @@ jobs:
             console.log(`👨‍💻 PR Author: ${prAuthor}`);
             console.log(`👤 Current User: ${currentUser}`);
             
-            // レビュワーが指定されていない場合はエラー
+            // レビュワーが指定されていない場合の処理
             if (totalReviewers === 0) {
+              // 一時的に作成者自身の場合はスキップ
+              if (prAuthor === currentUser) {
+                console.log('✅ Skipping reviewer check for PR author (temporary setting)');
+                
+                const comment = `
+                ## ℹ️ レビュワーチェックスキップ（一時的）
+                
+                **プルリクエスト**: #${context.issue.number}
+                
+                ### 📝 説明
+                プルリクエスト作成者自身のため、レビュワーチェックをスキップしました。
+                
+                ### ⚠️ 注意
+                - **一時的な設定**: 現在は作成者自身の場合もスキップしています
+                - 本番環境では、必ず他のレビュワーを指定してください
+                - この設定は後で元に戻す予定です（イシュー #5）
+                
+                ---
+                🤖 自動生成されたコメントです
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+                
+                return;
+              }
+              
               console.log('❌ No reviewers assigned');
               
               const comment = `
@@ -49,9 +80,10 @@ jobs:
               ### 📋 推奨レビュワー
               - 適切なチームメンバー
               - または、プロジェクト管理者
+              - **一時的に**: プルリクエスト作成者自身も指定可能
               
               ### ⚠️ 重要
-              - プルリクエスト作成者自身はレビュワーとして指定できません
+              - **一時的な設定**: 現在はプルリクエスト作成者自身もレビュワーとして指定可能です
               - レビュワーが見つからない場合は、リポジトリ管理者に連絡してコラボレーターとして追加してもらってください
               
               ---
