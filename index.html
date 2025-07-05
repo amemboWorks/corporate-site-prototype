@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>株式会社サンプル - Corporate Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 60px 0;
+            background: white;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .service-meta {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .service-features {
+            margin-top: 0.5rem;
+        }
+
+        .service-features span {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin: 2px;
+        }
+
+        /* News Section */
+        .news-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .news-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .news-item:hover {
+            transform: translateX(5px);
+        }
+
+        .news-item.important {
+            border-left-color: #ff6b6b;
+        }
+
+        .news-item.important::before {
+            content: "重要";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .news-title {
+            font-weight: bold;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-category {
+            display: inline-block;
+            background: #e9ecef;
+            color: #495057;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .news-author {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        /* Company Info Section */
+        .company-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .company-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .company-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .company-card ul {
+            list-style: none;
+        }
+
+        .company-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .company-card li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .loading::after {
+            content: "...";
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            40% { color: black; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 black, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 black, .5em 0 0 black; }
+        }
+
+        /* Error message */
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section h2 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Update Indicator */
+        .update-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .update-indicator.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Update Indicator -->
+    <div class="update-indicator" id="updateIndicator">
+        🔄 最終更新: <span id="lastUpdate">読み込み中...</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo" id="companyName">株式会社サンプル</div>
+            <ul class="nav-links">
+                <li><a href="#home">ホーム</a></li>
+                <li><a href="#about">会社概要</a></li>
+                <li><a href="#services">サービス</a></li>
+                <li><a href="#news">お知らせ</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>革新的なソリューションで<br>未来を創造する</h1>
+                <p>私たちは最新技術とクリエイティブなアイデアで、<br>お客様のビジネスを成功に導きます。</p>
+                <a href="#contact" class="cta-button">お問い合わせ</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <h2>会社概要</h2>
+                <div id="companyInfo" class="loading">読み込み中</div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="section" id="services">
+            <div class="container">
+                <h2>サービス</h2>
+                <div id="servicesList" class="loading">読み込み中</div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section class="section" id="news">
+            <div class="container">
+                <h2>お知らせ</h2>
+                <div id="newsList" class="loading">読み込み中</div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="container">
+                <h2>お問い合わせ</h2>
+                <div id="contactInfo" class="loading">読み込み中</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 <span id="footerCompanyName">株式会社サンプル</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // データ読み込み用の関数
+        async function loadJSON(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error(`Error loading ${url}:`, error);
+                return null;
+            }
+        }
+
+        // エラー表示用の関数
+        function showError(containerId, message) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<div class="error">⚠️ ${message}</div>`;
+        }
+
+        // 会社情報の読み込みと表示
+        async function loadCompanyInfo() {
+            const data = await loadJSON('content/company-info.json');
+            if (!data) {
+                showError('companyInfo', '会社情報の読み込みに失敗しました');
+                return;
+            }
+
+            const company = data.company;
+            
+            // ヘッダーとフッターの会社名を更新
+            document.getElementById('companyName').textContent = company.name;
+            document.getElementById('footerCompanyName').textContent = company.name;
+
+            // 会社概要セクションの表示
+            const companyInfoHTML = `
+                <div class="company-info">
+                    <div class="company-card">
+                        <h3>🏢 基本情報</h3>
+                        <ul>
+                            <li>会社名: ${company.name}</li>
+                            <li>設立: ${company.established}</li>
+                            <li>資本金: ${company.capital}</li>
+                            <li>従業員数: ${company.employees}</li>
+                            <li>代表取締役: ${company.ceo}</li>
+                        </ul>
+                    </div>
+                    <div class="company-card">
+                        <h3>🏪 所在地</h3>
+                        <ul>
+                            <li>〒${company.address.postal}</li>
+                            <li>${company.address.prefecture}${company.address.city}</li>
+                            <li>${company.address.detail}</li>
+                        </ul>
+                    </div>
+                    <div class="company-card">
+                        <h3>💼 事業内容</h3>
+                        <ul>
+                            ${company.business.map(business => `<li>${business}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="company-card">
+                        <h3>🌐 SNS</h3>
+                        <ul>
+                            <li>Twitter: ${company.social.twitter}</li>
+                            <li>LinkedIn: ${company.social.linkedin}</li>
+                            <li>Facebook: ${company.social.facebook}</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('companyInfo').innerHTML = companyInfoHTML;
+        }
+
+        // サービス情報の読み込みと表示
+        async function loadServices() {
+            const data = await loadJSON('content/services.json');
+            if (!data) {
+                showError('servicesList', 'サービス情報の読み込みに失敗しました');
+                return;
+            }
+
+            const servicesHTML = `
+                <div class="features">
+                    ${data.services.map(service => `
+                        <div class="feature-card">
+                            <div class="feature-icon">${service.icon}</div>
+                            <h3>${service.title}</h3>
+                            <p>${service.description}</p>
+                            <div class="service-meta">
+                                <div><strong>価格目安:</strong> ${service.price_range}</div>
+                                <div><strong>期間:</strong> ${service.duration}</div>
+                                <div class="service-features">
+                                    ${service.features.map(feature => `<span>${feature}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('servicesList').innerHTML = servicesHTML;
+        }
+
+        // お知らせの読み込みと表示
+        async function loadNews() {
+            const data = await loadJSON('content/news.json');
+            if (!data) {
+                showError('newsList', 'お知らせの読み込みに失敗しました');
+                return;
+            }
+
+            const newsHTML = `
+                <div class="news-list">
+                    ${data.news.map(news => `
+                        <div class="news-item ${news.important ? 'important' : ''}">
+                            <div class="news-date">${news.date}</div>
+                            <div class="news-title">${news.title}</div>
+                            <div class="news-content">${news.content}</div>
+                            <div class="news-category">${news.category}</div>
+                            <div class="news-author">投稿者: ${news.author}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('newsList').innerHTML = newsHTML;
+            
+            // 最新のお知らせ日付を更新インジケーターに表示
+            if (data.news.length > 0) {
+                const latestDate = data.news[0].date;
+                document.getElementById('lastUpdate').textContent = latestDate;
+            }
+        }
+
+        // お問い合わせ情報の読み込みと表示
+        async function loadContactInfo() {
+            const data = await loadJSON('content/company-info.json');
+            if (!data) {
+                showError('contactInfo', 'お問い合わせ情報の読み込みに失敗しました');
+                return;
+            }
+
+            const company = data.company;
+            const contactHTML = `
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>📍 所在地</h3>
+                        <p>〒${company.address.postal}<br>
+                        ${company.address.prefecture}${company.address.city}<br>
+                        ${company.address.detail}</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>📞 電話番号</h3>
+                        <p>${company.contact.phone}<br>
+                        FAX: ${company.contact.fax}<br>
+                        （平日 9:00-18:00）</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>📧 メールアドレス</h3>
+                        <p>一般: ${company.contact.email}<br>
+                        サポート: ${company.contact.support_email}</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>🌐 SNS</h3>
+                        <p>Twitter: ${company.social.twitter}<br>
+                        LinkedIn: ${company.social.linkedin}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('contactInfo').innerHTML = contactHTML;
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 全データの並行読み込み
+            await Promise.all([
+                loadCompanyInfo(),
+                loadServices(),
+                loadNews(),
+                loadContactInfo()
+            ]);
+
+            // 更新インジケーターの表示
+            setTimeout(() => {
+                const updateIndicator = document.getElementById('updateIndicator');
+                updateIndicator.classList.add('show');
+            }, 1000);
+            
+            // 更新インジケーターを5秒後に非表示
+            setTimeout(() => {
+                const updateIndicator = document.getElementById('updateIndicator');
+                updateIndicator.classList.remove('show');
+            }, 6000);
+
+            // スクロールアニメーションの設定
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // フェードインアニメーションの設定
+            document.querySelectorAll('.feature-card, .news-item, .company-card, .contact-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 定期的なデータ更新（5分ごと）
+        setInterval(async () => {
+            console.log('データを更新中...');
+            await loadNews(); // お知らせのみ定期更新
+        }, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

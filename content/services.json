@@ -1,0 +1,46 @@
+{
+    "services": [
+      {
+        "id": "service001",
+        "title": "Webソリューション",
+        "description": "レスポンシブデザインに対応したウェブサイトの制作から、ECサイトの構築まで幅広く対応いたします。",
+        "icon": "💻",
+        "features": [
+          "レスポンシブデザイン",
+          "ECサイト構築",
+          "CMS導入",
+          "SEO対策"
+        ],
+        "price_range": "50万円〜",
+        "duration": "1-3ヶ月"
+      },
+      {
+        "id": "service002",
+        "title": "モバイルアプリ開発", 
+        "description": "iOS・Android両プラットフォームに対応したモバイルアプリケーションの企画・開発を行います。",
+        "icon": "📱",
+        "features": [
+          "iOS/Android対応",
+          "ネイティブアプリ",
+          "ハイブリッドアプリ",
+          "アプリストア公開"
+        ],
+        "price_range": "100万円〜",
+        "duration": "2-6ヶ月"
+      },
+      {
+        "id": "service003",
+        "title": "クラウドサービス",
+        "description": "AWS、Azure、GCPなどのクラウドプラットフォームを活用したインフラ構築・運用をサポートします。", 
+        "icon": "☁️",
+        "features": [
+          "AWS/Azure/GCP",
+          "インフラ構築",
+          "運用・監視",
+          "セキュリティ対策"
+        ],
+        "price_range": "30万円〜",
+        "duration": "継続"
+      }
+    ]
+  }

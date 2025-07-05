@@ -1,0 +1,72 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Validate JSON files
+        run: |
+          echo "🔍 Validating JSON files..."
+          for file in content/*.json; do
+            echo "Checking $file"
+            if ! cat "$file" | jq empty; then
+              echo "❌ Invalid JSON in $file"
+              exit 1
+            else
+              echo "✅ $file is valid"
+            fi
+          done
+      
+      - name: Check HTML structure
+        run: |
+          echo "🔍 Checking HTML structure..."
+          if [ -f "index.html" ]; then
+            echo "✅ index.html exists"
+          else
+            echo "❌ index.html not found"
+            exit 1
+          fi
+
+  deploy:
+    needs: validate
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
+      - name: Notify Success
+        run: |
+          echo "🚀 Deployment successful!"
+          echo "📝 Site URL: ${{ steps.deployment.outputs.page_url }}"

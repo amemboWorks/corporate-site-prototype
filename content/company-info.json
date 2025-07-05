@@ -1,0 +1,33 @@
+{
+    "company": {
+      "name": "株式会社サンプル",
+      "name_en": "Sample Corporation", 
+      "established": "2020年4月1日",
+      "capital": "1,000万円",
+      "employees": "50名",
+      "ceo": "山田 太郎",
+      "business": [
+        "Webシステム開発",
+        "モバイルアプリ開発", 
+        "クラウドサービス",
+        "ITコンサルティング"
+      ],
+      "address": {
+        "postal": "100-0001",
+        "prefecture": "東京都",
+        "city": "千代田区",
+        "detail": "千代田1-1-1 サンプルビル10階"
+      },
+      "contact": {
+        "phone": "03-1234-5678",
+        "fax": "03-1234-5679", 
+        "email": "info@sample-corp.jp",
+        "support_email": "support@sample-corp.jp"
+      },
+      "social": {
+        "twitter": "@sample_corp",
+        "linkedin": "Sample Corp",
+        "facebook": "SampleCorporation"
+      }
+    }
+  }

@@ -1,0 +1,68 @@
+name: コンテンツ更新
+description: ウェブサイトのコンテンツを更新する
+title: "[更新] "
+labels: ["content-update"]
+body:
+  - type: dropdown
+    id: update-type
+    attributes:
+      label: 更新種別
+      description: 更新する内容を選択してください
+      options:
+        - お知らせ追加
+        - サービス情報更新
+        - 会社情報変更
+        - その他
+    validations:
+      required: true
+  
+  - type: input
+    id: update-section
+    attributes:
+      label: 更新箇所
+      description: 具体的な更新箇所を記入してください
+      placeholder: 例：トップページのお知らせセクション
+    validations:
+      required: true
+  
+  - type: textarea
+    id: update-content
+    attributes:
+      label: 更新内容
+      description: 詳細な更新内容を記入してください
+      placeholder: |
+        例：
+        タイトル: 新サービスリリースのお知らせ
+        内容: AIを活用した新しいソリューションをリリースしました...
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 緊急度
+      options:
+        - 高（即日対応必要）
+        - 中（1週間以内）
+        - 低（1ヶ月以内）
+    validations:
+      required: true
+  
+  - type: input
+    id: publish-date
+    attributes:
+      label: 希望公開日
+      description: 公開したい日付を入力してください
+      placeholder: 2025-07-10
+  
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 確認事項
+      options:
+        - label: 更新内容に間違いがないことを確認しました
+          required: true
+        - label: 関連部署の承認を得ています
+          required: false
+        - label: 法的・コンプライアンス上の問題がないことを確認しました
+          required: false
