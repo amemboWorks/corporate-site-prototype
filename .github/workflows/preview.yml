@@ -38,10 +38,15 @@ jobs:
             
             const reviewers = pr.requested_reviewers || [];
             const teamReviewers = pr.requested_teams || [];
+            const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
             
-            console.log(`📋 Reviewers: ${reviewers.length + teamReviewers.length}`);
+            console.log(`📋 Reviewers: ${totalReviewers}`);
+            console.log(`👨‍💻 PR Author: ${prAuthor}`);
+            console.log(`👤 Current User: ${currentUser}`);
             
-            if (reviewers.length + teamReviewers.length === 0) {
+            if (totalReviewers === 0) {
               core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer.');
             } else {
               console.log('✅ Reviewers are assigned');
@@ -80,9 +85,18 @@ jobs:
             const reviewers = pr.requested_reviewers || [];
             const teamReviewers = pr.requested_teams || [];
             const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
             
             const reviewerList = reviewers.map(r => `@${r.login}`).join(', ');
             const teamList = teamReviewers.map(t => `@${t.slug}`).join(', ');
+            
+            let reviewerStatus = '';
+            if (totalReviewers > 0) {
+              reviewerStatus = '✅ 完了';
+            } else {
+              reviewerStatus = '❌ 未指定';
+            }
             
             const comment = `
             ## 🔍 プレビュー確認
@@ -94,7 +108,7 @@ jobs:
             ### ✅ 検証結果
             - JSONファイルの構文チェック: 完了
             - ファイル構成チェック: 完了
-            - レビュワー指定: ${totalReviewers > 0 ? '✅ 完了' : '❌ 未指定'}
+            - レビュワー指定: ${reviewerStatus}
             
             ### 👥 レビュワー
             ${totalReviewers > 0 ? 

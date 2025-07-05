@@ -21,15 +21,19 @@ jobs:
             const reviewers = pr.requested_reviewers || [];
             const teamReviewers = pr.requested_teams || [];
             const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
             
             console.log(`📋 Reviewers: ${totalReviewers}`);
             console.log(`👤 Individual reviewers: ${reviewers.map(r => r.login).join(', ')}`);
             console.log(`👥 Team reviewers: ${teamReviewers.map(t => t.slug).join(', ')}`);
+            console.log(`👨‍💻 PR Author: ${prAuthor}`);
+            console.log(`👤 Current User: ${currentUser}`);
             
+            // レビュワーが指定されていない場合はエラー
             if (totalReviewers === 0) {
-              core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer to proceed.');
+              console.log('❌ No reviewers assigned');
               
-              // コメントを追加
               const comment = `
               ## ⚠️ レビュワー未指定
               
@@ -43,8 +47,12 @@ jobs:
               2. または、プルリクエストのコメントで \`@username\` を指定
               
               ### 📋 推奨レビュワー
-              - @amemboWorks
-              - または、適切なチームメンバー
+              - 適切なチームメンバー
+              - または、プロジェクト管理者
+              
+              ### ⚠️ 重要
+              - プルリクエスト作成者自身はレビュワーとして指定できません
+              - レビュワーが見つからない場合は、リポジトリ管理者に連絡してコラボレーターとして追加してもらってください
               
               ---
               🤖 自動生成されたコメントです
@@ -56,6 +64,11 @@ jobs:
                 repo: context.repo.repo,
                 body: comment
               });
+              
+              core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer to proceed.');
+              return;
+            }
+            
             } else {
               console.log('✅ Reviewers are assigned');
               
