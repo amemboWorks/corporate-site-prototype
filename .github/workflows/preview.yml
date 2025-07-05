@@ -47,11 +47,6 @@ jobs:
             console.log(`👤 Current User: ${currentUser}`);
             
             if (totalReviewers === 0) {
-              // 一時的に作成者自身の場合はスキップ
-              if (prAuthor === currentUser) {
-                console.log('✅ Skipping reviewer check for PR author (temporary setting)');
-                return;
-              }
               core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer.');
             } else {
               console.log('✅ Reviewers are assigned');
@@ -99,8 +94,6 @@ jobs:
             let reviewerStatus = '';
             if (totalReviewers > 0) {
               reviewerStatus = '✅ 完了';
-            } else if (prAuthor === currentUser) {
-              reviewerStatus = '⚠️ スキップ（一時的）';
             } else {
               reviewerStatus = '❌ 未指定';
             }
@@ -120,9 +113,7 @@ jobs:
             ### 👥 レビュワー
             ${totalReviewers > 0 ? 
               `**指定済み**: ${reviewerList} ${teamList}` : 
-              prAuthor === currentUser ? 
-                '**スキップ（一時的）** - プルリクエスト作成者自身' :
-                '**未指定** - レビュワーを指定してください'
+              '**未指定** - レビュワーを指定してください'
             }
             
             ### 📋 確認項目
