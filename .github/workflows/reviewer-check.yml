@@ -67,8 +67,6 @@ jobs:
               
               core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer to proceed.');
               return;
-            }
-            
             } else {
               console.log('✅ Reviewers are assigned');
               
