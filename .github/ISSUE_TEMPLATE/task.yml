@@ -1,0 +1,113 @@
+name: タスク
+description: 新しいタスクを作成する
+title: "[タスク] "
+labels: ["task"]
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      description: タスクの優先度を選択してください
+      options:
+        - 🔴 高（緊急）
+        - 🟡 中（重要）
+        - 🟢 低（通常）
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: category
+    attributes:
+      label: カテゴリ
+      description: タスクのカテゴリを選択してください
+      options:
+        - 🐛 バグ修正
+        - ✨ 新機能
+        - 📝 ドキュメント
+        - 🔧 改善
+        - 🧪 テスト
+        - 🎨 UI/UX
+        - ⚡ パフォーマンス
+        - 🔒 セキュリティ
+        - その他
+    validations:
+      required: true
+  
+  - type: input
+    id: title
+    attributes:
+      label: タスクタイトル
+      description: 簡潔で分かりやすいタイトルを入力してください
+      placeholder: 例：ログイン機能の実装
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: 詳細説明
+      description: タスクの詳細を記述してください
+      placeholder: |
+        例：
+        ## 概要
+        ユーザーログイン機能を実装する
+        
+        ## 要件
+        - メールアドレスとパスワードでのログイン
+        - セッション管理
+        - ログアウト機能
+        
+        ## 完了条件
+        - [ ] ログインフォームの作成
+        - [ ] 認証処理の実装
+        - [ ] セッション管理の実装
+        - [ ] ログアウト機能の実装
+        - [ ] テストの作成
+    validations:
+      required: true
+  
+  - type: input
+    id: assignee
+    attributes:
+      label: 担当者
+      description: タスクの担当者を指定してください
+      placeholder: @username
+    validations:
+      required: false
+  
+  - type: input
+    id: due-date
+    attributes:
+      label: 期限
+      description: タスクの期限を入力してください
+      placeholder: 2025-07-15
+    validations:
+      required: false
+  
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: 受け入れ条件
+      description: タスクが完了したとみなす条件を記述してください
+      placeholder: |
+        例：
+        - [ ] ユーザーが正常にログインできる
+        - [ ] ログイン後、ダッシュボードにリダイレクトされる
+        - [ ] ログアウト後、ログインページにリダイレクトされる
+        - [ ] エラーハンドリングが適切に動作する
+    validations:
+      required: false
+  
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 事前確認事項
+      options:
+        - label: 要件が明確になっている
+          required: true
+        - label: 担当者が決まっている
+          required: false
+        - label: 期限が設定されている
+          required: false
+        - label: 関連する既存のイシューがない
+          required: false 

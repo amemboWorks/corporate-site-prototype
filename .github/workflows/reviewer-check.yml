@@ -1,0 +1,131 @@
+name: Reviewer Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-reviewers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Reviewers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            const reviewers = pr.requested_reviewers || [];
+            const teamReviewers = pr.requested_teams || [];
+            const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
+            
+            console.log(`📋 Reviewers: ${totalReviewers}`);
+            console.log(`👤 Individual reviewers: ${reviewers.map(r => r.login).join(', ')}`);
+            console.log(`👥 Team reviewers: ${teamReviewers.map(t => t.slug).join(', ')}`);
+            console.log(`👨‍💻 PR Author: ${prAuthor}`);
+            console.log(`👤 Current User: ${currentUser}`);
+            
+            // レビュワーが指定されていない場合の処理
+            if (totalReviewers === 0) {
+              // 一時的に作成者自身の場合はスキップ
+              if (prAuthor === currentUser) {
+                console.log('✅ Skipping reviewer check for PR author (temporary setting)');
+                
+                const comment = `
+                ## ℹ️ レビュワーチェックスキップ（一時的）
+                
+                **プルリクエスト**: #${context.issue.number}
+                
+                ### 📝 説明
+                プルリクエスト作成者自身のため、レビュワーチェックをスキップしました。
+                
+                ### ⚠️ 注意
+                - **一時的な設定**: 現在は作成者自身の場合もスキップしています
+                - 本番環境では、必ず他のレビュワーを指定してください
+                - この設定は後で元に戻す予定です（イシュー #5）
+                
+                ---
+                🤖 自動生成されたコメントです
+                `;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+                
+                return;
+              }
+              
+              console.log('❌ No reviewers assigned');
+              
+              const comment = `
+              ## ⚠️ レビュワー未指定
+              
+              **プルリクエスト**: #${context.issue.number}
+              
+              ### ❌ 問題
+              レビュワーが指定されていません。
+              
+              ### ✅ 解決方法
+              1. このプルリクエストの右側の「Reviewers」セクションでレビュワーを追加
+              2. または、プルリクエストのコメントで \`@username\` を指定
+              
+              ### 📋 推奨レビュワー
+              - 適切なチームメンバー
+              - または、プロジェクト管理者
+              - **一時的に**: プルリクエスト作成者自身も指定可能
+              
+              ### ⚠️ 重要
+              - **一時的な設定**: 現在はプルリクエスト作成者自身もレビュワーとして指定可能です
+              - レビュワーが見つからない場合は、リポジトリ管理者に連絡してコラボレーターとして追加してもらってください
+              
+              ---
+              🤖 自動生成されたコメントです
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+              
+              core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer to proceed.');
+              return;
+            } else {
+              console.log('✅ Reviewers are assigned');
+              
+              // 成功コメントを追加
+              const reviewerList = reviewers.map(r => `@${r.login}`).join(', ');
+              const teamList = teamReviewers.map(t => `@${t.slug}`).join(', ');
+              
+              const comment = `
+              ## ✅ レビュワー確認完了
+              
+              **プルリクエスト**: #${context.issue.number}
+              
+              ### 👥 指定されたレビュワー
+              ${reviewerList} ${teamList}
+              
+              ### 📋 次のステップ
+              1. レビュワーからの承認を待機
+              2. 承認後、マージが可能になります
+              
+              ---
+              🤖 自動生成されたコメントです
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            } 

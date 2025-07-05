@@ -26,6 +26,37 @@ jobs:
             fi
           done
 
+      - name: Check Reviewers
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            const reviewers = pr.requested_reviewers || [];
+            const teamReviewers = pr.requested_teams || [];
+            const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
+            
+            console.log(`📋 Reviewers: ${totalReviewers}`);
+            console.log(`👨‍💻 PR Author: ${prAuthor}`);
+            console.log(`👤 Current User: ${currentUser}`);
+            
+            if (totalReviewers === 0) {
+              // 一時的に作成者自身の場合はスキップ
+              if (prAuthor === currentUser) {
+                console.log('✅ Skipping reviewer check for PR author (temporary setting)');
+                return;
+              }
+              core.setFailed('❌ No reviewers assigned. Please assign at least one reviewer.');
+            } else {
+              console.log('✅ Reviewers are assigned');
+            }
+
   preview:
     needs: validate
     runs-on: ubuntu-latest
@@ -50,6 +81,30 @@ jobs:
         with:
           script: |
             const prNumber = context.issue.number;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+            
+            const reviewers = pr.requested_reviewers || [];
+            const teamReviewers = pr.requested_teams || [];
+            const totalReviewers = reviewers.length + teamReviewers.length;
+            const prAuthor = pr.user.login;
+            const currentUser = context.actor;
+            
+            const reviewerList = reviewers.map(r => `@${r.login}`).join(', ');
+            const teamList = teamReviewers.map(t => `@${t.slug}`).join(', ');
+            
+            let reviewerStatus = '';
+            if (totalReviewers > 0) {
+              reviewerStatus = '✅ 完了';
+            } else if (prAuthor === currentUser) {
+              reviewerStatus = '⚠️ スキップ（一時的）';
+            } else {
+              reviewerStatus = '❌ 未指定';
+            }
+            
             const comment = `
             ## 🔍 プレビュー確認
             
@@ -60,6 +115,15 @@ jobs:
             ### ✅ 検証結果
             - JSONファイルの構文チェック: 完了
             - ファイル構成チェック: 完了
+            - レビュワー指定: ${reviewerStatus}
+            
+            ### 👥 レビュワー
+            ${totalReviewers > 0 ? 
+              `**指定済み**: ${reviewerList} ${teamList}` : 
+              prAuthor === currentUser ? 
+                '**スキップ（一時的）** - プルリクエスト作成者自身' :
+                '**未指定** - レビュワーを指定してください'
+            }
             
             ### 📋 確認項目
             - [ ] レイアウトの確認

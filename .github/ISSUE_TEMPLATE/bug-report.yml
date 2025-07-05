@@ -1,0 +1,109 @@
+name: バグ報告
+description: バグを報告する
+title: "[バグ] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 深刻度
+      description: バグの深刻度を選択してください
+      options:
+        - 🔴 致命的（システムが使用できない）
+        - 🟠 重大（主要機能が動作しない）
+        - 🟡 中程度（機能に制限がある）
+        - 🟢 軽微（使用に支障はない）
+    validations:
+      required: true
+  
+  - type: input
+    id: title
+    attributes:
+      label: バグのタイトル
+      description: 簡潔で分かりやすいタイトルを入力してください
+      placeholder: 例：ログインボタンをクリックしても反応しない
+    validations:
+      required: true
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: バグの詳細
+      description: バグの詳細を記述してください
+      placeholder: |
+        例：
+        ## 概要
+        ログインボタンをクリックしても何も起こらない
+        
+        ## 再現手順
+        1. ログインページにアクセス
+        2. メールアドレスとパスワードを入力
+        3. ログインボタンをクリック
+        4. 何も起こらない
+        
+        ## 期待される動作
+        ログイン処理が実行され、ダッシュボードにリダイレクトされる
+        
+        ## 実際の動作
+        ボタンをクリックしても何も起こらない
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 環境
+      description: バグが発生した環境を選択してください
+      options:
+        - 🌐 本番環境
+        - 🧪 ステージング環境
+        - 💻 開発環境
+        - 📱 モバイル
+        - 🖥️ デスクトップ
+    validations:
+      required: true
+  
+  - type: input
+    id: browser
+    attributes:
+      label: ブラウザ（Webアプリの場合）
+      description: 使用しているブラウザとバージョンを入力してください
+      placeholder: Chrome 120.0.6099.109
+    validations:
+      required: false
+  
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: 使用しているOSを入力してください
+      placeholder: macOS 14.0
+    validations:
+      required: false
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ・エラーメッセージ
+      description: エラーログやコンソールエラーがあれば記述してください
+      placeholder: |
+        例：
+        ```
+        Error: Cannot read property 'login' of undefined
+        at login.js:15:23
+        ```
+    validations:
+      required: false
+  
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 追加情報
+      description: その他の関連情報があれば記述してください
+      placeholder: |
+        例：
+        - 特定の条件でのみ発生する
+        - 他の機能には影響しない
+        - 以前は正常に動作していた
+    validations:
+      required: false 
